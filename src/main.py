@@ -22,6 +22,7 @@ async def on_ready():
 
 async def larger_num_of_reactions(ctx: discord.Interaction):
     await asyncio.sleep(5)
+    
     # returns a discord.InteractionMessage object
     interactionMessageObject = await ctx.original_response()
 
@@ -46,6 +47,7 @@ async def start_chaos_sequence(interaction: discord.Interaction):
     embedVar = discord.Embed(title="", description=user_invoke + " wants to invoke the Chaos Sequence. Waiting for majority vote for permission.", color=0x00ff00)
     embedVar.add_field(name="Protocol 0x0001", value="React with green or red to either: permit the Chaos Sequence; forbid the Chaos Sequence.", inline=False)
     await interaction.response.send_message(embed=embedVar)
+
     # emoji reactions to embed
     msg = await interaction.original_response()
     await msg.add_reaction("🟩")
