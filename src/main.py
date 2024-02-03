@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from discord import app_commands
 from discord.ext import commands
 
+from options.test_print import cmds
+
 load_dotenv()
 token = os.getenv("token")
 
@@ -19,6 +21,8 @@ async def on_ready():
         print(f"Loaded {len(await bot.tree.sync())} command(s).")
     except Exception as error:
         print(error)
+
+    await bot.load_extension("options.test_print")
 
 async def larger_num_of_reactions(ctx: discord.Interaction):
     await asyncio.sleep(5)
@@ -53,6 +57,14 @@ async def start_chaos_sequence(interaction: discord.Interaction):
     await msg.add_reaction("🟩")
     await msg.add_reaction("🟥")
     await larger_num_of_reactions(interaction)
+
+# TODO: flesh this function out.
+@bot.tree.command(name="cogtest")
+async def cog_test(interaction: discord.Interaction):
+    print(bot.cogs)
+    # test = bot.get_cog('cmds')
+    # await test.ping(interaction)
+
 
 if __name__ == "__main__":
     print(f"Booting up {bot.user}: All command types enabled.")
