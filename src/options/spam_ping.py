@@ -28,11 +28,5 @@ class spam_ping(commands.Cog):
             await channel.send(chosen_user.mention)
 
 
-
-
-
-
-
-
 async def setup(bot):
     await bot.add_cog(spam_ping(bot))

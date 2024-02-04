@@ -23,6 +23,7 @@ async def on_ready():
 
     await bot.load_extension("options.ban")
     await bot.load_extension("options.spam_ping")
+    await bot.load_extension("options.vc_mute")
 
 
 async def larger_num_of_reactions(ctx: discord.Interaction):
@@ -70,6 +71,12 @@ async def spam_ping_test(interaction: discord.Interaction):
     test = bot.get_cog('spam_ping')
     if test is not None:
         await test.spam(interaction)
+
+@bot.tree.command(name="mutevctest")
+async def ban_test(interaction: discord.Interaction):
+    test = bot.get_cog('vc_mute')
+    if test is not None:
+        await test.mute_for_vc(interaction)
 
 if __name__ == "__main__":
     print(f"Booting up {bot.user}: All command types enabled.")
