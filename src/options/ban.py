@@ -39,10 +39,10 @@ class ban(commands.Cog):
         embed.set_field_at(index=1, name="Countdown", value="0", inline=False)
         await asyncio.sleep(1)
         await message.edit(embed=embed)
-
-        channel = interaction.channel
+        embed.set_field_at(index=0, name="", value=chosen_user.mention + " has been banned.")
+        embed.remove_field(index=1)
+        await message.edit(embed=embed)
         #await chosen_user.ban(reason="")
-        await channel.send(f'{chosen_user.mention} has been banned.')
 
 
 

@@ -19,12 +19,18 @@ class spam_ping(commands.Cog):
             return
 
         chosen_user = random.choice(users)
-        num = random.randint(1, 25)
+        num = random.randint(5, 25)
 
         channel = interaction.channel
 
-        await interaction.response.send_message(f'{chosen_user.mention} will now be pinged {num} times')
-        for i in range(num-1):
+        embed = discord.Embed(title="Spam Ping", description="")
+        embed.add_field(name="", value=chosen_user.mention + " will now be pinged " + str(num) + " times.")
+        embed.set_thumbnail(url=chosen_user.avatar)
+        await interaction.response.send_message(embed=embed)
+
+        await asyncio.sleep(1)
+
+        for i in range(num):
             await channel.send(chosen_user.mention)
 
 

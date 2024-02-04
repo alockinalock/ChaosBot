@@ -11,10 +11,9 @@ class vc_mute(commands.Cog):
     async def on_ready(self):
         print(f'{self.__class__.__name__} cog loaded')
 
+    # TODO: unmute someone when someone else is muted
     async def mute_for_vc(self, interaction: discord.Interaction):
-        users = [user for user in interaction.guild.members if not(user.bot or user == interaction.guild.owner)]
-
-        print(users)
+        users = [user for user in interaction.guild.members if not(user.bot or user == interaction.guild.owner or user.voice is None  or user.voice.mute == True)]
 
         if not users:
             await interaction.response.send_message("No users found")
@@ -22,9 +21,12 @@ class vc_mute(commands.Cog):
 
         chosen_user = random.choice(users)
 
-        # FIXME: doesnt mute in vc or in text
-        chosen_user.edit(mute=True)
-        await interaction.response.send_message(f'{chosen_user.mention} has been muted.')
+        embed = discord.Embed(title="Spam Ping", description="")
+        embed.add_field(name="", value=chosen_user.mention + " is now muted")
+        embed.set_thumbnail(url=chosen_user.avatar)
+        await interaction.response.send_message(embed=embed)
+        await asyncio.sleep(1)
+        await chosen_user.edit(mute=True)
 
 
 async def setup(bot):

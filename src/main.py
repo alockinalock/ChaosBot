@@ -44,6 +44,8 @@ async def larger_num_of_reactions(ctx: discord.Interaction):
     # send msg w/o interaction
     id = interactionMessageObject.channel.id
     channel = bot.get_channel(id)
+
+    # TODO: invoke the actual chaos sequence
     await channel.send(f"{highest_reaction_symbol} wins with {highest_reaction_number} vote(s)!")
 
 @bot.tree.command(name="chaos", description="Are you sure about this?")
