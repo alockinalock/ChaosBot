@@ -16,7 +16,7 @@ class ban(commands.Cog):
         users = [user for user in interaction.guild.members if not (user.bot or user == interaction.guild.owner)]
 
         if not users:
-            await interaction.response.send_message("No users can be banned.")
+            await interaction.response.send_message("No users found")
             return
 
         chosen_user = random.choice(users)
@@ -41,7 +41,7 @@ class ban(commands.Cog):
         await message.edit(embed=embed)
 
         channel = interaction.channel
-        await chosen_user.ban(reason="Sucks to suck.")
+        #await chosen_user.ban(reason="")
         await channel.send(f'{chosen_user.mention} has been banned.')
 
 
