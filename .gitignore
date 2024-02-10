@@ -8,6 +8,9 @@ desktop.ini
 .Trashes
 ._*
 
+# Jetbrains
+.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

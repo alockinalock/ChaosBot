@@ -16,7 +16,7 @@ class vc_mute(commands.Cog):
         users = [user for user in interaction.guild.members if not(user.bot or user == interaction.guild.owner or user.voice is None  or user.voice.mute == True)]
 
         if not users:
-            await interaction.response.send_message("No users found")
+            await interaction.response.send_message("No users in voice channels")
             return
 
         chosen_user = random.choice(users)
