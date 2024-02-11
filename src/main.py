@@ -21,15 +21,23 @@ async def on_ready():
     except Exception as error:
         print(error)
 
-    await bot.load_extension("options.ban")
-    await bot.load_extension("options.spam_ping")
-    await bot.load_extension("options.vc_mute")
-    await bot.load_extension("options.monkeys_and_typewriters")
+    extension_directory = "options"
+    extension_files = [file for file in os.listdir(extension_directory) if file.endswith(".py")]
+
+    for file in extension_files:
+        file_name = file[:-3]
+        full_extension_file_path = f"{extension_directory}.{file_name}"
+        await bot.load_extension(full_extension_file_path)
+
+    # await bot.load_extension("options.ban")
+    # await bot.load_extension("options.spam_ping")
+    # await bot.load_extension("options.vc_mute")
+    # await bot.load_extension("options.monkeys_and_typewriters")
 
 
 async def larger_num_of_reactions(ctx: discord.Interaction):
     await asyncio.sleep(5)
-    
+
     # returns a discord.InteractionMessage object
     interactionMessageObject = await ctx.original_response()
 
@@ -87,6 +95,14 @@ async def monkeytypewriter_test(interaction: discord.Interaction):
     if test is not None:
         await test.to_be_or_not_to_be(interaction)
 
+@bot.tree.command(name="nicktest")
+async def monkeytypewriter_test(interaction: discord.Interaction):
+    test = bot.get_cog('nickname_change')
+    if test is not None:
+        await test.change_user_nickname(interaction)
+
 if __name__ == "__main__":
     print(f"Booting up {bot.user}: All command types enabled.")
     bot.run(token)
+
+# Would be preferable if mute and ban had unban/unmute waves as functions.

@@ -21,7 +21,7 @@ class vc_mute(commands.Cog):
 
         chosen_user = random.choice(users)
 
-        embed = discord.Embed(title="Spam Ping", description="")
+        embed = discord.Embed(title="Voice Chat Mute", description="")
         embed.add_field(name="", value=chosen_user.mention + " is now muted")
         embed.set_thumbnail(url=chosen_user.avatar)
         await interaction.response.send_message(embed=embed)

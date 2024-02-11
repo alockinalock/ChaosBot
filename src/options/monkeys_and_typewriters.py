@@ -39,6 +39,7 @@ class monkeys_and_typewriters(commands.Cog):
 
     # TODO: break this into separate functions
     # TODO: clean this shitty code
+    # This feature does not have a kill switch. The addition of one might be useful
     async def to_be_or_not_to_be(self, interaction: discord.Interaction):
         channel = interaction.channel
 
@@ -46,6 +47,7 @@ class monkeys_and_typewriters(commands.Cog):
         embed.add_field(name="",
                         value="The monkeys are ready to start typing on their typewriters. Good luck to them!")
         await interaction.response.send_message(embed=embed)
+        await asyncio.sleep(1)
 
         sentence = []
         # What a horrible way of checking the sentence.
