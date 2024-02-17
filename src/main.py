@@ -21,22 +21,22 @@ async def on_ready():
     except Exception as error:
         print(error)
 
+
+    # load all cogs in the options directory
+    current_working_directory = os.path.dirname(os.path.abspath(__file__))
     extension_directory = "options"
-    extension_files = [file for file in os.listdir(extension_directory) if file.endswith(".py")]
+    target_directory = os.path.join(current_working_directory, extension_directory)
+    extension_files = [file for file in os.listdir(target_directory) if file.endswith(".py")]
 
     for file in extension_files:
         file_name = file[:-3]
         full_extension_file_path = f"{extension_directory}.{file_name}"
         await bot.load_extension(full_extension_file_path)
 
-    # await bot.load_extension("options.ban")
-    # await bot.load_extension("options.spam_ping")
-    # await bot.load_extension("options.vc_mute")
-    # await bot.load_extension("options.monkeys_and_typewriters")
-
 
 async def larger_num_of_reactions(ctx: discord.Interaction):
-    await asyncio.sleep(5)
+    # TODO: maybe provide a countdown for this
+    await asyncio.sleep(15)
 
     # returns a discord.InteractionMessage object
     interactionMessageObject = await ctx.original_response()
@@ -71,6 +71,7 @@ async def start_chaos_sequence(interaction: discord.Interaction):
     await msg.add_reaction("🟥")
     await larger_num_of_reactions(interaction)
 
+# temporary methods
 @bot.tree.command(name="bantest")
 async def ban_test(interaction: discord.Interaction):
     test = bot.get_cog('ban')
@@ -96,10 +97,16 @@ async def monkeytypewriter_test(interaction: discord.Interaction):
         await test.to_be_or_not_to_be(interaction)
 
 @bot.tree.command(name="nicktest")
-async def monkeytypewriter_test(interaction: discord.Interaction):
+async def nickname_changer_test(interaction: discord.Interaction):
     test = bot.get_cog('nickname_change')
     if test is not None:
         await test.change_user_nickname(interaction)
+
+@bot.tree.command(name="giftest")
+async def gif_test(interaction: discord.Interaction):
+    test = bot.get_cog('send_gif')
+    if test is not None:
+        await test.send_gif(interaction)
 
 if __name__ == "__main__":
     print(f"Booting up {bot.user}: All command types enabled.")

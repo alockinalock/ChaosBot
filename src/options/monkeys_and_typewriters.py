@@ -90,6 +90,7 @@ class monkeys_and_typewriters(commands.Cog):
             # Could attempt to edit a single message, instead of sending a shit ton of new ones
             #await channel.send(sentence) # debug line
             await channel.send(self.format_sentence(sentence))
+                
 
             # check string at the end of sentence to whatever should be in that position in final
             if sentence[len(sentence) - 1] != final[len(sentence) - 1]:
