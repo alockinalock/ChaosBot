@@ -3,7 +3,7 @@ import os
 import asyncio
 
 from dotenv import load_dotenv
-# May be redundant
+# 'app_commands' may be redundant
 from discord import app_commands
 from discord.ext import commands
 
@@ -107,6 +107,12 @@ async def gif_test(interaction: discord.Interaction):
     test = bot.get_cog('send_gif')
     if test is not None:
         await test.send_gif(interaction)
+
+@bot.tree.command(name="channel_create_test")
+async def create_channel_test(interaction: discord.Interaction):
+    test = bot.get_cog("channel_create")
+    if test is not None:
+        await test.create_channel_test(interaction)
 
 if __name__ == "__main__":
     print(f"Booting up {bot.user}: All command types enabled.")
