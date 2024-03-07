@@ -31,6 +31,7 @@ async def on_ready():
     for file in extension_files:
         file_name = file[:-3]
         full_extension_file_path = f"{extension_directory}.{file_name}"
+        print(f"Loading cog: {full_extension_file_path}")
         await bot.load_extension(full_extension_file_path)
 
 
@@ -108,11 +109,18 @@ async def gif_test(interaction: discord.Interaction):
     if test is not None:
         await test.send_gif(interaction)
 
+# FIXME: this cog does not work. do not invoke
 @bot.tree.command(name="channel_create_test")
 async def create_channel_test(interaction: discord.Interaction):
     test = bot.get_cog("channel_create")
     if test is not None:
-        await test.create_channel_test(interaction)
+        await test.create_channel_TXT(interaction)
+
+@bot.tree.command(name="penguin_test")
+async def penguin_reference_test(interaction: discord.Interaction):
+    test = bot.get_cog("scrape_unsplash_penguins")
+    if test is not None:
+        await test.send_penguin_img(interaction)
 
 if __name__ == "__main__":
     print(f"Booting up {bot.user}: All command types enabled.")

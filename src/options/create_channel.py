@@ -18,7 +18,9 @@ class channel_create(commands.Cog):
         print(f'{self.__class__.__name__} cog loaded')
             
     # Create a single new channel
-    async def create_channel_text(self, interaction: discord.Interaction):
+    async def create_channel_TXT(self, interaction: discord.Interaction):
+        print(type(interaction))
+
         guild = interaction.guild
         channel_generated_name = name_gen()
         # FIXME
