@@ -8,10 +8,6 @@ class send_gif(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'{self.__class__.__name__} cog loaded')
-
     # -------------------------------------------------------
     # reliant on the gifs folder actually HAVING gifs in it.
     # using tenor links may be a better option

@@ -7,10 +7,6 @@ class vc_mute(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'{self.__class__.__name__} cog loaded')
-
     # TODO: unmute someone when someone else is muted
     async def mute_for_vc(self, interaction: discord.Interaction):
         users = [user for user in interaction.guild.members if not(user.bot or user == interaction.guild.owner or user.voice is None  or user.voice.mute == True)]

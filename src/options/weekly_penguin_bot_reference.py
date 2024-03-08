@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import requests
 
 class scrape_unsplash_penguins(commands.Cog):
+
     def __init__(self, bot):
         self.bot = bot
         self.url = "https://unsplash.com/s/photos/penguin?license=free"

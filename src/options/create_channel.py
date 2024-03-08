@@ -12,19 +12,14 @@ class channel_create(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'{self.__class__.__name__} cog loaded')
             
     # Create a single new channel
     async def create_channel_TXT(self, interaction: discord.Interaction):
         print(type(interaction))
 
-        guild = interaction.guild
         channel_generated_name = name_gen()
         # FIXME
-        created_channel_instance = await guild.create_text_channel(channel_generated_name)
+        created_channel_instance = await interaction.guild.create_text_channel(channel_generated_name)
         
         embed = discord.Embed(title="Create Channel", description="")
         embed.add_field(name="", value="ChaosBot has created a new channel named " + channel_generated_name + "!")

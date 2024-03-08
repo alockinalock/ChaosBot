@@ -24,10 +24,6 @@ class monkeys_and_typewriters(commands.Cog):
     def __len__(self):
         return len(self.dict)
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f'{self.__class__.__name__} cog loaded')
-
     def format_sentence(self, sentence) -> str:
         formatted_sentence = ""
         for string in sentence :

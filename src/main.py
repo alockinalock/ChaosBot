@@ -12,6 +12,8 @@ token = os.getenv("token")
 
 bot = commands.Bot(command_prefix='cb!', intents = discord.Intents.all())
 
+# load cogs ------------------------------------------------
+
 @bot.event
 async def on_ready():
     print(f"{bot.user} is online: All command types enabled")
@@ -34,6 +36,22 @@ async def on_ready():
         print(f"Loading cog: {full_extension_file_path}")
         await bot.load_extension(full_extension_file_path)
 
+# ----------------------------------------------------------
+
+# front end ------------------------------------------------
+
+async def mutating_ellipsis(channel):
+    cycles = 3
+    while cycles != 0:
+        await channel.send("Loading sequence")
+        await asyncio.sleep(0.20)
+        await channel.send("Loading sequence.")
+        await asyncio.sleep(0.20)
+        await channel.send("Loading sequence..")
+        await asyncio.sleep(0.20)
+        await channel.send("Loading sequence...")
+        await asyncio.sleep(0.20)
+        cycles -= 1
 
 async def larger_num_of_reactions(ctx: discord.Interaction):
     # TODO: maybe provide a countdown for this
@@ -55,8 +73,16 @@ async def larger_num_of_reactions(ctx: discord.Interaction):
     id = interactionMessageObject.channel.id
     channel = bot.get_channel(id)
 
+    if highest_reaction_symbol == "🟩":
+        await mutating_ellipsis(channel)
+        await channel.send("Sequence is loaded. Have fun.")
+    else:
+        await channel.send("Sequence aborted. See you next time.")
+
     # TODO: invoke the actual chaos sequence
-    await channel.send(f"{highest_reaction_symbol} wins with {highest_reaction_number} vote(s)!")
+    print(f"{highest_reaction_symbol} won the vote. Votes obtained: {highest_reaction_number}")
+
+
 
 @bot.tree.command(name="chaos", description="Are you sure about this?")
 async def start_chaos_sequence(interaction: discord.Interaction):
@@ -72,7 +98,10 @@ async def start_chaos_sequence(interaction: discord.Interaction):
     await msg.add_reaction("🟥")
     await larger_num_of_reactions(interaction)
 
-# temporary methods
+# ----------------------------------------------------------
+
+# ------------------- TEMP -------------------
+
 @bot.tree.command(name="bantest")
 async def ban_test(interaction: discord.Interaction):
     test = bot.get_cog('ban')
@@ -121,6 +150,8 @@ async def penguin_reference_test(interaction: discord.Interaction):
     test = bot.get_cog("scrape_unsplash_penguins")
     if test is not None:
         await test.send_penguin_img(interaction)
+
+# --------------------------------------------
 
 if __name__ == "__main__":
     print(f"Booting up {bot.user}: All command types enabled.")
