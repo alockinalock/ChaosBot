@@ -22,15 +22,10 @@ async def on_ready():
     print("If you do not see the cogs load, the bot is not ready to for use.\nThis is most likely due to the bot being rate limited.")
     print("****************************************************\n")
     try:
-        # 1/2: MUST BE PRINTED FOR BOT TO WORK
-        print(f"Loaded {len(await bot.tree.sync())} command(s).")
+        # 1/2 - Load all commands in main.py
+        print(f"Loading {len(await bot.tree.sync())} command(s) in main.py.\n")
     except Exception as error:
         print(error)
-    
-    # FIXME: DEV
-    var = await bot.tree.sync()
-    print(type(len(var)))
-    print(len(var))
 
     # load all cogs in the options directory
     current_working_directory = os.path.dirname(os.path.abspath(__file__))
@@ -38,19 +33,27 @@ async def on_ready():
     target_directory = os.path.join(current_working_directory, extension_directory)
     extension_files = [file for file in os.listdir(target_directory) if file.endswith(".py")]
 
+    index = 1
+
     for file in extension_files:
         file_name = file[:-3]
         full_extension_file_path = f"{extension_directory}.{file_name}"
-        # 2/2: MUST BE PRINTED FOR BOT TO WORK
-        print(f"Loading cog: {full_extension_file_path}")
+        # 2/2 - Load the cogs themselves
+        print(f"Loading cog {index}: {full_extension_file_path}")
+        index += 1
         await bot.load_extension(full_extension_file_path)
 
 # ----------------------------------------------------------
 ############################################################ 
 # BACK END -------------------------------------------------
 
+# must be in an async func
+async def get_command_tree_length() -> int:
+    return len(await bot.tree.sync())
+
+# kill process handler
 def handle_sigterm(signum, frame):
-    print("Chaos Bot is shutting off.")
+    print("\nChaos Bot is shutting off.")
     exit(0)
 
 signal.signal(signal.SIGTERM, handle_sigterm)
@@ -58,7 +61,10 @@ signal.signal(signal.SIGTERM, handle_sigterm)
 
 command_list = {}
 
-#def load_cogs_into_set():
+def load_cogs_into_set():
+    for i in range(get_command_tree_length()):
+        print("placeholder")
+
 
 # ----------------------------------------------------------
 ############################################################
@@ -120,7 +126,7 @@ async def larger_num_of_reactions(ctx: discord.Interaction):
     # TODO: invoke the actual chaos sequence
     
     # DEV ONLY
-    print(f"{highest_reaction_symbol} won the vote. Votes obtained (excluding bot's own vote): {highest_reaction_number}")
+    print(f"\n{highest_reaction_symbol} won the vote. Votes obtained (excluding bot's own vote): {highest_reaction_number}")
 
 
 @bot.tree.command(name="chaos", description="Are you sure about this?")
@@ -137,11 +143,15 @@ async def start_chaos_sequence(interaction: discord.Interaction):
     await msg.add_reaction("🟥")
     await larger_num_of_reactions(interaction)
 
+
+# TODO: Test the conditional
+# This command force quites unsafely. Use only in a last ditch effort.
 @bot.tree.command(name="killswitch", description="Halt Chaos Bot processes.")
-async def kill_switch_DEV_ONLY(interaction: discord.Interaction, user: discord.Member):
+async def kill_switch_DEV_ONLY(interaction: discord.Interaction):
     # Only allow the owner to kill switch the bot. Using ID allows us to change this to possibly a single user ID in the future.
-    if (user.id == interaction.guild.owner.id):
-        await interaction.response.send_message("User with appropriate permissions has activated the kill switch for: Chaos Bot")
+    if (interaction.user.id == interaction.guild.owner.id):
+        print(f"\nUsername: {interaction.user.name}; ID: {interaction.user.id} invoked killswitch.")
+        await interaction.response.send_message("User with appropriate permissions has activated the kill switch.")
         os.kill(os.getpid(), signal.SIGTERM)
         return
     
