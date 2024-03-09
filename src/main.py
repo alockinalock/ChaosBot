@@ -1,5 +1,6 @@
 import discord
 import os
+import signal
 import asyncio
 
 from dotenv import load_dotenv
@@ -21,7 +22,7 @@ async def on_ready():
     print("If you do not see the cogs load, the bot is not ready to for use.\nThis is most likely due to the bot being rate limited.")
     print("****************************************************\n")
     try:
-        # Ensure this statement is printed or else COGS dont work
+        # 1/2: MUST BE PRINTED FOR BOT TO WORK
         print(f"Loaded {len(await bot.tree.sync())} command(s).")
     except Exception as error:
         print(error)
@@ -40,6 +41,7 @@ async def on_ready():
     for file in extension_files:
         file_name = file[:-3]
         full_extension_file_path = f"{extension_directory}.{file_name}"
+        # 2/2: MUST BE PRINTED FOR BOT TO WORK
         print(f"Loading cog: {full_extension_file_path}")
         await bot.load_extension(full_extension_file_path)
 
@@ -47,10 +49,16 @@ async def on_ready():
 ############################################################ 
 # BACK END -------------------------------------------------
 
+def handle_sigterm(signum, frame):
+    print("Chaos Bot is shutting off.")
+    exit(0)
+
+signal.signal(signal.SIGTERM, handle_sigterm)
+
+
 command_list = {}
 
 #def load_cogs_into_set():
-
 
 # ----------------------------------------------------------
 ############################################################
@@ -128,6 +136,17 @@ async def start_chaos_sequence(interaction: discord.Interaction):
     await msg.add_reaction("🟩")
     await msg.add_reaction("🟥")
     await larger_num_of_reactions(interaction)
+
+@bot.tree.command(name="killswitch", description="Halt Chaos Bot processes.")
+async def kill_switch_DEV_ONLY(interaction: discord.Interaction, user: discord.Member):
+    # Only allow the owner to kill switch the bot. Using ID allows us to change this to possibly a single user ID in the future.
+    if (user.id == interaction.guild.owner.id):
+        await interaction.response.send_message("User with appropriate permissions has activated the kill switch for: Chaos Bot")
+        os.kill(os.getpid(), signal.SIGTERM)
+        return
+    
+    await interaction.response.send_message("User does not have apprioriate permissions. Killswitch will not be activated.")
+    
 
 # ----------------------------------------------------------
 
