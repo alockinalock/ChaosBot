@@ -1,6 +1,7 @@
 import discord
 import os
 import signal
+import random
 import asyncio
 
 from dotenv import load_dotenv
@@ -13,13 +14,16 @@ token = os.getenv("token")
 
 bot = commands.Bot(command_prefix='cb!', intents = discord.Intents.all())
 
+# array which contains the names of all cogs
+command_list = []
+
 # load cogs ------------------------------------------------
 
 @bot.event
 async def on_ready():
     print(f"\n{bot.user} is online: All command types enabled\n")
     print("****************************************************")
-    print("If you do not see the cogs load, the bot is not ready to for use.\nThis is most likely due to the bot being rate limited.")
+    print("If you do not see the cogs load, the bot is not ready to for use.")
     print("****************************************************\n")
     try:
         # 1/2 - Load all commands in main.py
@@ -37,6 +41,7 @@ async def on_ready():
 
     for file in extension_files:
         file_name = file[:-3]
+        command_list.append(file_name)
         full_extension_file_path = f"{extension_directory}.{file_name}"
         # 2/2 - Load the cogs themselves
         print(f"Loading cog {index}: {full_extension_file_path}")
@@ -47,7 +52,7 @@ async def on_ready():
 ############################################################ 
 # BACK END -------------------------------------------------
 
-# must be in an async func
+
 async def get_command_tree_length() -> int:
     return len(await bot.tree.sync())
 
@@ -58,12 +63,12 @@ def handle_sigterm(signum, frame):
 
 signal.signal(signal.SIGTERM, handle_sigterm)
 
-
-command_list = {}
-
-def load_cogs_into_set():
-    for i in range(get_command_tree_length()):
-        print("placeholder")
+def choose_cog_random() -> Cog | None:
+    chosen_cog = random.choice(command_list)
+    cog = bot.get_cog(chosen_cog)
+    if cog is not None:
+        return cog;
+    return None
 
 
 # ----------------------------------------------------------
