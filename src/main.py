@@ -40,22 +40,33 @@ async def on_ready():
 
 # front end ------------------------------------------------
 
-async def mutating_ellipsis(channel):
+async def mutating_ellipsis(channel) -> discord.message.Message:
     cycles = 3
-    while cycles != 0:
-        await channel.send("Loading sequence")
-        await asyncio.sleep(0.20)
-        await channel.send("Loading sequence.")
-        await asyncio.sleep(0.20)
-        await channel.send("Loading sequence..")
-        await asyncio.sleep(0.20)
-        await channel.send("Loading sequence...")
-        await asyncio.sleep(0.20)
+    first_cycle_complete_status = False
+    original_message = await channel.send("Loading sequence") # discord.message.Message type
+
+    while cycles > 0:
+        if not first_cycle_complete_status:
+            await original_message.edit(content="Loading sequence.")
+            await asyncio.sleep(0.5)
+            first_cycle_complete_status = True
+        else:
+            await original_message.edit(content="Loading sequence")
+            await asyncio.sleep(0.5)
+            await original_message.edit(content="Loading sequence.")
+            await asyncio.sleep(0.5)
+        await original_message.edit(content="Loading sequence..")
+        await asyncio.sleep(0.5)
+        await original_message.edit(content="Loading sequence...")
+        await asyncio.sleep(0.5)
         cycles -= 1
+    
+    return original_message
 
 async def larger_num_of_reactions(ctx: discord.Interaction):
     # TODO: maybe provide a countdown for this
-    await asyncio.sleep(15)
+    # await asyncio.sleep(15)
+    await asyncio.sleep(2)
 
     # returns a discord.InteractionMessage object
     interactionMessageObject = await ctx.original_response()
@@ -74,13 +85,15 @@ async def larger_num_of_reactions(ctx: discord.Interaction):
     channel = bot.get_channel(id)
 
     if highest_reaction_symbol == "🟩":
-        await mutating_ellipsis(channel)
-        await channel.send("Sequence is loaded. Have fun.")
+        orig_msg = await mutating_ellipsis(channel)
+        await orig_msg.edit(content="!!! Sequence is loaded. Have fun. !!!")
     else:
         await channel.send("Sequence aborted. See you next time.")
 
     # TODO: invoke the actual chaos sequence
-    print(f"{highest_reaction_symbol} won the vote. Votes obtained: {highest_reaction_number}")
+    
+    # DEV ONLY
+    print(f"{highest_reaction_symbol} won the vote. Votes obtained (excluding bot's own vote): {highest_reaction_number}")
 
 
 
