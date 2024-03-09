@@ -16,13 +16,20 @@ bot = commands.Bot(command_prefix='cb!', intents = discord.Intents.all())
 
 @bot.event
 async def on_ready():
-    print(f"{bot.user} is online: All command types enabled")
+    print(f"\n{bot.user} is online: All command types enabled\n")
+    print("****************************************************")
+    print("If you do not see the cogs load, the bot is not ready to for use.\nThis is most likely due to the bot being rate limited.")
+    print("****************************************************\n")
     try:
-        # ensure this statement is printed or else COGS dont work
+        # Ensure this statement is printed or else COGS dont work
         print(f"Loaded {len(await bot.tree.sync())} command(s).")
     except Exception as error:
         print(error)
-
+    
+    # FIXME: DEV
+    var = await bot.tree.sync()
+    print(type(len(var)))
+    print(len(var))
 
     # load all cogs in the options directory
     current_working_directory = os.path.dirname(os.path.abspath(__file__))
@@ -37,12 +44,22 @@ async def on_ready():
         await bot.load_extension(full_extension_file_path)
 
 # ----------------------------------------------------------
+############################################################ 
+# BACK END -------------------------------------------------
 
+command_list = {}
+
+#def load_cogs_into_set():
+
+
+# ----------------------------------------------------------
+############################################################
 # FRONT END ------------------------------------------------
 
 
 async def mutating_ellipsis_loading(channel) -> discord.message.Message:
-    cycles = 3
+    cycles = 2
+
     first_cycle_complete_status = False
     original_message = await channel.send("Loading sequence") # discord.message.Message type
 
@@ -66,7 +83,7 @@ async def mutating_ellipsis_loading(channel) -> discord.message.Message:
 
 
 async def larger_num_of_reactions(ctx: discord.Interaction):
-    # TODO: maybe provide a countdown for this
+    # TODO: maybe provide a countdown for this; DEV
     # await asyncio.sleep(15)
     await asyncio.sleep(2)
 
@@ -88,7 +105,7 @@ async def larger_num_of_reactions(ctx: discord.Interaction):
 
     if highest_reaction_symbol == "🟩":
         orig_msg = await mutating_ellipsis_loading(channel)
-        await orig_msg.edit(content="!!! Sequence is loaded. Have fun. !!!")
+        await orig_msg.edit(content="Sequence is loaded. Have fun.")
     else:
         await channel.send("Sequence aborted. See you next time.")
 
@@ -103,7 +120,7 @@ async def start_chaos_sequence(interaction: discord.Interaction):
     # send an embed
     user_invoke = interaction.user.mention
     embedVar = discord.Embed(title="", description=user_invoke + " wants to invoke the Chaos Sequence. Waiting for majority vote for permission.", color=0x00ff00)
-    embedVar.add_field(name="Protocol 0x0001", value="React with green or red to either: permit the Chaos Sequence; forbid the Chaos Sequence.", inline=False)
+    embedVar.add_field(name="Protocol 0x0001", value="React with green or red to either: permit the Chaos Sequence; halt the Chaos Sequence.", inline=False)
     await interaction.response.send_message(embed=embedVar)
 
     # emoji reactions to embed
