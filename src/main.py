@@ -38,9 +38,10 @@ async def on_ready():
 
 # ----------------------------------------------------------
 
-# front end ------------------------------------------------
+# FRONT END ------------------------------------------------
 
-async def mutating_ellipsis(channel) -> discord.message.Message:
+
+async def mutating_ellipsis_loading(channel) -> discord.message.Message:
     cycles = 3
     first_cycle_complete_status = False
     original_message = await channel.send("Loading sequence") # discord.message.Message type
@@ -62,6 +63,7 @@ async def mutating_ellipsis(channel) -> discord.message.Message:
         cycles -= 1
     
     return original_message
+
 
 async def larger_num_of_reactions(ctx: discord.Interaction):
     # TODO: maybe provide a countdown for this
@@ -85,7 +87,7 @@ async def larger_num_of_reactions(ctx: discord.Interaction):
     channel = bot.get_channel(id)
 
     if highest_reaction_symbol == "🟩":
-        orig_msg = await mutating_ellipsis(channel)
+        orig_msg = await mutating_ellipsis_loading(channel)
         await orig_msg.edit(content="!!! Sequence is loaded. Have fun. !!!")
     else:
         await channel.send("Sequence aborted. See you next time.")
@@ -94,7 +96,6 @@ async def larger_num_of_reactions(ctx: discord.Interaction):
     
     # DEV ONLY
     print(f"{highest_reaction_symbol} won the vote. Votes obtained (excluding bot's own vote): {highest_reaction_number}")
-
 
 
 @bot.tree.command(name="chaos", description="Are you sure about this?")
